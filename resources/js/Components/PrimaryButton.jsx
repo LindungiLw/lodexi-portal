@@ -1,0 +1,20 @@
+export default function PrimaryButton({
+    className = '',
+    disabled,
+    children,
+    ...props
+}) {
+    return (
+        <button
+            {...props}
+            className={
+                `inline-flex items-center rounded-md border border-transparent bg-lodex-coral px-4 py-2 text-xs font-bold uppercase tracking-widest text-slate-900 transition duration-150 ease-in-out hover:bg-lodex-coral-light focus:bg-lodex-coral-light focus:outline-none focus:ring-2 focus:ring-lodex-cyan focus:ring-offset-2 active:bg-lodex-coral dark:focus:ring-offset-slate-800 ${
+                    disabled && 'opacity-25'
+                } ` + className
+            }
+            disabled={disabled}
+        >
+            {children}
+        </button>
+    );
+}
