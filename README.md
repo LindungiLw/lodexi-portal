@@ -1,58 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
+  <br />
+  <img src="public/favicon.ico" width="80" alt="LODEXI Logo" />
+  <h1>LODEXI Portal</h1>
+  <p>
+    <strong>The Centralized AI Gateway & Dashboard for the LODEXI Ecosystem</strong>
+  </p>
+</div>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<br />
 
-## About Laravel
+## 🚀 Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**LODEXI Portal** is a modern, high-performance web application built to serve as the front-facing dashboard and management portal for the LODEXI Core Engine. It allows users and organizations to manage their AI knowledge bases, monitor API usage, and interact seamlessly with the underlying RAG (Retrieval-Augmented Generation) engine.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Built with an elegant stack: **Laravel 13**, **React**, **Inertia.js**, and **Tailwind CSS**.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ✨ Key Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- 🔐 **Multi-Tenant Authentication**: Built-in secure authentication system powered by Laravel Breeze.
+- 🎨 **Modern Aesthetics**: A beautifully crafted UI using LODEXI's signature pastel palette (Cyan & Coral) and glassmorphism components.
+- 🧠 **AI Knowledge Management**: Upload, manage, and monitor your organizational documents directly from the portal.
+- ⚡ **Seamless Core Integration**: Connects effortlessly to the `lodexi-core` Python engine via optimized REST services (`LodexService.php`).
+- 📊 **Real-time API Metrics**: Generate and manage `X-API-Key` tokens for your downstream applications.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 💻 Tech Stack
 
-## Agentic Development
+- **Backend**: Laravel 13 (PHP 8.2+)
+- **Frontend**: React 18
+- **Routing**: Inertia.js (SPA experience without building an API)
+- **Styling**: Tailwind CSS v3
+- **Build Tool**: Vite
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
+
+## 🛠️ Quickstart Guide
+
+### 1. Requirements
+- PHP 8.2 or higher
+- Composer
+- Node.js & npm
+- SQLite / MySQL / PostgreSQL
+
+### 2. Installation
+
+Clone the repository and install dependencies:
 
 ```bash
-composer require laravel/boost --dev
+git clone https://github.com/lodexi/portal.git lodexi-portal
+cd lodexi-portal
 
-php artisan boost:install
+# Install PHP dependencies
+composer install
+
+# Install Node dependencies
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 3. Environment Setup
 
-## Contributing
+```bash
+# Copy the example environment file
+cp .env.example .env
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Generate application key
+php artisan key:generate
 
-## Code of Conduct
+# Run database migrations
+php artisan migrate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Configure your `.env` file to connect to the `lodexi-core` engine:
+```env
+LODEXI_CORE_URL=http://localhost:8000
+```
 
-## Security Vulnerabilities
+### 4. Run Development Servers
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+You will need two terminals to run the frontend and backend simultaneously:
 
-## License
+**Terminal 1 (Laravel Backend):**
+```bash
+php artisan serve --port=8080
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Terminal 2 (Vite Frontend):**
+```bash
+npm run dev
+```
+
+Visit 👉 **http://localhost:8080** in your browser.
+
+---
+
+## 📜 License
+
+Copyright © 2026 LODEXI. All rights reserved.
+
+This software is proprietary. You may not use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software without explicit written permission.
