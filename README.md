@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-  <img src="public/favicon.ico" width="80" alt="LODEXI Logo" />
+  <img src="public/lodexi-logo.svg" width="300" alt="LODEXI Logo" />
   <h1>LODEXI Portal</h1>
   <p>
     <strong>The Centralized AI Gateway & Dashboard for the LODEXI Ecosystem</strong>
@@ -9,7 +9,7 @@
 
 <br />
 
-## 🚀 Overview
+## Overview
 
 **LODEXI Portal** is a modern, high-performance web application built to serve as the front-facing dashboard and management portal for the LODEXI Core Engine. It allows users and organizations to manage their AI knowledge bases, monitor API usage, and interact seamlessly with the underlying RAG (Retrieval-Augmented Generation) engine.
 
@@ -17,17 +17,17 @@ Built with an elegant stack: **Laravel 13**, **React**, **Inertia.js**, and **Ta
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-- 🔐 **Multi-Tenant Authentication**: Built-in secure authentication system powered by Laravel Breeze.
-- 🎨 **Modern Aesthetics**: A beautifully crafted UI using LODEXI's signature pastel palette (Cyan & Coral) and glassmorphism components.
-- 🧠 **AI Knowledge Management**: Upload, manage, and monitor your organizational documents directly from the portal.
-- ⚡ **Seamless Core Integration**: Connects effortlessly to the `lodexi-core` Python engine via optimized REST services (`LodexService.php`).
-- 📊 **Real-time API Metrics**: Generate and manage `X-API-Key` tokens for your downstream applications.
+- **Multi-Tenant Authentication**: Built-in secure authentication system powered by Laravel Breeze.
+- **Modern Aesthetics**: A beautifully crafted UI using LODEXI's signature Coral palette and glassmorphism components.
+- **AI Knowledge Management**: Upload, manage, and monitor your organizational documents directly from the portal.
+- **Seamless Core Integration**: Connects effortlessly to the `lodexi-core` Python engine via optimized REST services (`LodexService.php`).
+- **Real-time API Metrics**: Generate and manage `X-API-Key` tokens for your downstream applications.
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 
 - **Backend**: Laravel 13 (PHP 8.2+)
 - **Frontend**: React 18
@@ -37,7 +37,7 @@ Built with an elegant stack: **Laravel 13**, **React**, **Inertia.js**, and **Ta
 
 ---
 
-## 🛠️ Quickstart Guide
+## Quickstart Guide
 
 ### 1. Requirements
 - PHP 8.2 or higher
@@ -92,11 +92,11 @@ php artisan serve --port=8080
 npm run dev
 ```
 
-Visit 👉 **http://localhost:8080** in your browser.
+Visit **http://localhost:8080** in your browser.
 
 ---
 
-## 📜 License
+## License
 
 Copyright © 2026 LODEXI. All rights reserved.
 
