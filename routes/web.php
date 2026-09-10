@@ -6,7 +6,13 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', [LodexPortalController::class, 'index'])->name('portal.home');
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+    ]);
+})->name('portal.home');
+
 Route::post('/api/search', [LodexPortalController::class, 'search'])->name('portal.search');
 Route::post('/api/ask', [LodexPortalController::class, 'ask'])->name('portal.ask');
 Route::post('/api/ingest', [LodexPortalController::class, 'ingest'])->name('portal.ingest');
