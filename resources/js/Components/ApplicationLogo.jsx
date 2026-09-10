@@ -1,17 +1,21 @@
 export default function ApplicationLogo(props) {
     return (
-        <div {...props} className={"flex items-center space-x-2 " + (props.className || '')}>
-            <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M 25 15 C 25 15, 25 75, 25 75 C 25 85, 35 85, 35 85 L 85 85" stroke="#B1E5E6" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M 45 35 C 45 35, 45 65, 45 65 C 45 70, 50 70, 50 70 L 75 70" stroke="#F29191" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="25" cy="15" r="4" fill="#B1E5E6"/>
-                <circle cx="85" cy="85" r="4" fill="#B1E5E6"/>
-                <circle cx="45" cy="35" r="4" fill="#F29191"/>
-                <circle cx="75" cy="70" r="4" fill="#F29191"/>
-            </svg>
-            <span className="text-2xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-lodex-cyan to-lodex-coral uppercase" style={{ fontFamily: '"Inter", "Figtree", sans-serif' }}>
-                L<span className="text-white">O</span>DEXI
-            </span>
-        </div>
+        <svg {...props} viewBox="0 0 320 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={props.className || "h-10 w-auto"}>
+            <defs>
+                <linearGradient id="lodexGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#B1E5E6" />
+                    <stop offset="100%" stopColor="#F29191" />
+                </linearGradient>
+            </defs>
+            <path d="M 25 15 C 25 15, 25 75, 25 75 C 25 85, 35 85, 35 85 L 85 85" stroke="#B1E5E6" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M 45 35 C 45 35, 45 65, 45 65 C 45 70, 50 70, 50 70 L 75 70" stroke="#F29191" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="25" cy="15" r="4" fill="#B1E5E6"/>
+            <circle cx="85" cy="85" r="4" fill="#B1E5E6"/>
+            <circle cx="45" cy="35" r="4" fill="#F29191"/>
+            <circle cx="75" cy="70" r="4" fill="#F29191"/>
+            <text x="110" y="76" fontFamily="Inter, Figtree, sans-serif" fontWeight="900" fontSize="58" letterSpacing="0.05em" fill="url(#lodexGradient)">
+                L<tspan fill="#FFFFFF">O</tspan>DEXI
+            </text>
+        </svg>
     );
 }
