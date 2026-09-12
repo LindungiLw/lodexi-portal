@@ -168,7 +168,7 @@ export default function Login({ status }) {
                         >
                             Change Email
                         </button>
-                        <PrimaryButton className="ms-4 py-3 bg-cyan-500 hover:bg-cyan-600 border-none text-gray-900 font-bold" disabled={processing || otpCode.length !== 6}>
+                        <PrimaryButton className="ms-4 py-3 bg-[#F29191] hover:bg-[#ffb0b0] border-none text-white font-bold" disabled={processing || otpCode.length !== 6}>
                             {processing ? 'Verifying...' : 'Sign In'}
                         </PrimaryButton>
                     </div>
