@@ -17,9 +17,22 @@ Route::post('/api/search', [LodexPortalController::class, 'search'])->name('port
 Route::post('/api/ask', [LodexPortalController::class, 'ask'])->name('portal.ask');
 Route::post('/api/ingest', [LodexPortalController::class, 'ingest'])->name('portal.ingest');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        $documents = \App\Models\Document::where('user_id', auth()->id())->latest()->get();
+        return Inertia::render('Dashboard/Knowledge', [
+            'documents' => $documents
+        ]);
+    })->name('dashboard');
+
+    Route::get('/dashboard/apikeys', function () {
+        return Inertia::render('Dashboard/ApiKeys');
+    })->name('dashboard.apikeys');
+
+    Route::get('/dashboard/playground', function () {
+        return Inertia::render('Dashboard/Playground');
+    })->name('dashboard.playground');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

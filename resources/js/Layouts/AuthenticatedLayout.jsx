@@ -1,176 +1,122 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { Database, Key, MessageSquare, User, LogOut, Menu, X } from 'lucide-react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const NavItem = ({ href, active, icon: Icon, children }) => (
+        <Link
+            href={href}
+            className={`flex items-center px-4 py-3 mb-2 rounded-xl transition-all font-medium ${
+                active 
+                ? 'bg-[#F29191] text-white shadow-md' 
+                : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-gray-200'
+            }`}
+        >
+            <Icon className={`w-5 h-5 mr-3 ${active ? 'text-white' : 'text-[#F29191]'}`} />
+            {children}
+        </Link>
+    );
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-slate-900">
-            <nav className="border-b border-gray-100 bg-white dark:border-slate-700 dark:bg-slate-800">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href={route('dashboard')}>
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
-                                >
-                                    Dashboard
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-slate-800 dark:text-gray-400 dark:hover:text-gray-300"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
-                                    )
-                                }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-slate-900 dark:hover:text-gray-400 dark:focus:bg-slate-900 dark:focus:text-gray-400"
-                            >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
-                    }
-                >
-                    <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <div className="border-t border-gray-200 pb-1 pt-4 dark:border-slate-600">
-                        <div className="px-4">
-                            <div className="text-base font-medium text-gray-800 dark:text-gray-200">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
-                            </div>
-                        </div>
-
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            {header && (
-                <header className="bg-white shadow dark:bg-slate-800">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
-                </header>
+        <div className="flex h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white via-slate-50 to-[#F29191]/5 dark:bg-none dark:bg-slate-950 transition-colors duration-300 overflow-hidden">
+            
+            {/* Mobile Sidebar Overlay */}
+            {sidebarOpen && (
+                <div 
+                    className="fixed inset-0 z-40 bg-gray-900/50 backdrop-blur-sm lg:hidden"
+                    onClick={() => setSidebarOpen(false)}
+                ></div>
             )}
 
-            <main>{children}</main>
+            {/* Sidebar */}
+            <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-white/40 dark:bg-slate-900/50 backdrop-blur-xl border-r border-gray-200/50 dark:border-slate-800 flex flex-col transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-auto ${
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}>
+                <div className="h-20 flex items-center px-8 border-b border-gray-200/50 dark:border-slate-800">
+                    <Link href="/">
+                        <ApplicationLogo className="block h-10 w-auto" />
+                    </Link>
+                </div>
+
+                <div className="flex-1 overflow-y-auto py-6 px-4">
+                    <nav className="space-y-1">
+                        <NavItem href={route('dashboard')} active={route().current('dashboard')} icon={Database}>
+                            Knowledge Base
+                        </NavItem>
+                        <NavItem href={route('dashboard.apikeys')} active={route().current('dashboard.apikeys')} icon={Key}>
+                            API Keys
+                        </NavItem>
+                        <NavItem href={route('dashboard.playground')} active={route().current('dashboard.playground')} icon={MessageSquare}>
+                            AI Playground
+                        </NavItem>
+                    </nav>
+                </div>
+
+                <div className="p-4 border-t border-gray-200/50 dark:border-slate-800">
+                    <div className="bg-white/50 dark:bg-slate-800/50 rounded-2xl p-4">
+                        <div className="flex items-center mb-4">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#F29191] to-orange-300 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                                {user.name.charAt(0)}
+                            </div>
+                            <div className="ml-3 overflow-hidden">
+                                <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user.name}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <Link href={route('profile.edit')} className="flex items-center w-full px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors">
+                                <User className="w-4 h-4 mr-2" /> Profile Settings
+                            </Link>
+                            <Link href={route('logout')} method="post" as="button" className="flex items-center w-full px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors">
+                                <LogOut className="w-4 h-4 mr-2" /> Log Out
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            {/* Main Content */}
+            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+                {/* Mobile Header */}
+                <header className="lg:hidden bg-white/40 dark:bg-slate-900/50 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-800 h-16 flex items-center justify-between px-4">
+                    <Link href="/">
+                        <ApplicationLogo className="block h-8 w-auto" />
+                    </Link>
+                    <button 
+                        onClick={() => setSidebarOpen(true)}
+                        className="p-2 rounded-md text-gray-500 hover:bg-gray-100 dark:hover:bg-slate-800"
+                    >
+                        <Menu className="w-6 h-6" />
+                    </button>
+                </header>
+
+                {/* Page Header (if any) */}
+                {header && (
+                    <div className="bg-white/40 dark:bg-slate-900/50 backdrop-blur-md shadow-sm border-b border-gray-200/50 dark:border-slate-800 hidden lg:block">
+                        <div className="px-8 py-6">
+                            {header}
+                        </div>
+                    </div>
+                )}
+                
+                {/* Mobile Page Header */}
+                {header && (
+                    <div className="bg-white/40 dark:bg-slate-900/50 backdrop-blur-md shadow-sm border-b border-gray-200/50 dark:border-slate-800 lg:hidden">
+                        <div className="px-4 py-4">
+                            {header}
+                        </div>
+                    </div>
+                )}
+
+                {/* Page Content */}
+                <main className="flex-1 overflow-y-auto p-4 sm:p-8">
+                    {children}
+                </main>
+            </div>
         </div>
     );
 }
