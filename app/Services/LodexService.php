@@ -31,7 +31,7 @@ class LodexService
     }
 
     /**
-     * Ingest a document into the tenant's knowledge partition.
+     * Ingest a document into the tenant's knowledge partition (JSON text).
      */
     public function ingest(string $externalId, string $title, string $content, ?string $category = null, array $metadata = []): array
     {
@@ -42,6 +42,30 @@ class LodexService
             'category' => $category,
             'metadata' => $metadata,
         ]);
+
+        return $response->json();
+    }
+
+    /**
+     * Upload a physical document (PDF, DOCX, TXT) to the tenant's knowledge partition.
+     */
+    public function uploadDocument(string $externalId, string $filePath, string $filename, ?string $category = null, array $metadata = []): array
+    {
+        $response = Http::withHeaders([
+            'X-API-Key' => $this->apiKey,
+            'Accept' => 'application/json',
+            // Do not set Content-Type to application/json, let Laravel set it to multipart/form-data
+        ])->timeout(60)
+          ->attach('file', file_get_contents($filePath), $filename)
+          ->post("{$this->baseUrl}/v1/documents/upload", [
+              'external_id' => $externalId,
+              'category' => $category ?? '',
+              'metadata_json' => json_encode($metadata),
+          ]);
+
+        if ($response->failed()) {
+            throw new \Exception('LODEXI Core Error: ' . $response->body());
+        }
 
         return $response->json();
     }

@@ -57,17 +57,38 @@ class LodexPortalController extends Controller
     public function ingest(Request $request)
     {
         $request->validate([
-            'external_id' => 'required|string',
-            'title' => 'required|string',
-            'content' => 'required|string',
+            'document' => 'required|file|mimes:txt,pdf,docx|max:20480', // Limit to 20MB files
         ]);
 
-        $res = $this->lodex->ingest(
-            $request->input('external_id'),
-            $request->input('title'),
-            $request->input('content'),
-            $request->input('category')
-        );
-        return response()->json($res);
+        $file = $request->file('document');
+        $filename = $file->getClientOriginalName();
+        $size = number_format($file->getSize() / 1048576, 2) . ' MB';
+        $externalId = 'doc_' . uniqid();
+
+        // Save to Database
+        $document = \App\Models\Document::create([
+            'user_id' => auth()->id(),
+            'filename' => $filename,
+            'size' => $size,
+            'status' => 'Processing',
+            'external_id' => $externalId,
+        ]);
+
+        try {
+            $res = $this->lodex->uploadDocument(
+                $externalId,
+                $file->getRealPath(),
+                $filename,
+                $request->input('category')
+            );
+            
+            // Update status to Ingested
+            $document->update(['status' => 'Ingested']);
+            return response()->json(['message' => 'Document ingested successfully', 'document' => $document, 'result' => $res]);
+
+        } catch (\Exception $e) {
+            $document->update(['status' => 'Failed']);
+            return response()->json(['error' => 'Failed to ingest document', 'details' => $e->getMessage()], 500);
+        }
     }
 }
