@@ -1,9 +1,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
-import { Key, Copy, Eye, EyeOff, PlusCircle, CheckCircle2, MoreVertical, Shield, Clock, AlertCircle } from 'lucide-react';
+import { Key, Copy, Eye, EyeOff, PlusCircle, CheckCircle2, MoreVertical, Shield, Clock, AlertCircle, Activity, Zap, Cpu } from 'lucide-react';
+import UpdateLlmSettingsForm from '../Profile/Partials/UpdateLlmSettingsForm';
 
-export default function ApiKeys() {
+export default function ApiKeys({ analytics }) {
     const [showKeys, setShowKeys] = useState({});
     const [copiedKey, setCopiedKey] = useState(null);
 
@@ -78,6 +79,48 @@ export default function ApiKeys() {
                         </div>
                     </div>
 
+                    {/* Analytics Dashboard Widgets */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Total Requests */}
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+                            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400">
+                                <Activity className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total API Requests</p>
+                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    {analytics?.total_requests || 0}
+                                </h3>
+                            </div>
+                        </div>
+
+                        {/* Prompt Tokens */}
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+                            <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl text-purple-600 dark:text-purple-400">
+                                <Cpu className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Prompt Tokens</p>
+                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    {analytics?.prompt_tokens?.toLocaleString() || 0}
+                                </h3>
+                            </div>
+                        </div>
+
+                        {/* Completion Tokens */}
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+                            <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl text-green-600 dark:text-green-400">
+                                <Zap className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Completion Tokens</p>
+                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    {analytics?.completion_tokens?.toLocaleString() || 0}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* API Keys Table */}
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-2xl dark:bg-slate-900 border border-gray-200 dark:border-slate-800">
                         <div className="overflow-x-auto">
@@ -149,6 +192,11 @@ export default function ApiKeys() {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    {/* LLM API Settings (BYOK) */}
+                    <div className="bg-white p-4 shadow sm:rounded-2xl sm:p-8 dark:bg-slate-900 border border-gray-200 dark:border-slate-800">
+                        <UpdateLlmSettingsForm className="max-w-xl" />
                     </div>
 
                 </div>

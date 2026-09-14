@@ -24,7 +24,6 @@ export default function Edit({ mustVerifyEmail, status }) {
                             className="max-w-xl"
                         />
                     </div>
-
                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>
