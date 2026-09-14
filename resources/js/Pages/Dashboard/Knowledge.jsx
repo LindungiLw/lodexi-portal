@@ -25,8 +25,8 @@ export default function Knowledge({ documents = [] }) {
             setUploadError("Format file tidak didukung. Harap unggah .txt, .pdf, atau .docx.");
             return;
         }
-        if (file.size > 20 * 1024 * 1024) {
-            setUploadError("File is too large. Maximum size is 20MB.");
+        if (file.size > 100 * 1024 * 1024) {
+            setUploadError("File is too large. Maximum size is 100MB.");
             return;
         }
 
@@ -40,10 +40,20 @@ export default function Knowledge({ documents = [] }) {
             const response = await fetch('/api/ingest', {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
                 },
                 body: formData
             });
+
+            if (!response.ok) {
+                // If it's a validation error, Laravel returns 422
+                if (response.status === 422) {
+                    const errorData = await response.json();
+                    setUploadError(errorData.message || "Validation failed.");
+                    return;
+                }
+            }
 
             const result = await response.json();
 
@@ -54,7 +64,8 @@ export default function Knowledge({ documents = [] }) {
                 setUploadError(result.error || "Failed to upload document.");
             }
         } catch (error) {
-            setUploadError("Network error occurred during upload.");
+            console.error("Upload error details:", error);
+            setUploadError("Network error occurred during upload. Check console for details.");
         } finally {
             setIsUploading(false);
             if (fileInputRef.current) {

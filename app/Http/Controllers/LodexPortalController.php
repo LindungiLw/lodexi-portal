@@ -57,8 +57,12 @@ class LodexPortalController extends Controller
     public function ingest(Request $request)
     {
         $request->validate([
-            'document' => 'required|file|mimes:txt,pdf,docx|max:20480', // Limit to 20MB files
+            'document' => 'required|file|mimes:txt,pdf,docx|max:102400', // Limit to 100MB files
         ]);
+
+        if (!$request->hasFile('document') || !$request->file('document')->isValid()) {
+            return response()->json(['error' => 'Gagal mengunggah file. Mungkin ukurannya melebihi batas upload_max_filesize di PHP.'], 400);
+        }
 
         $file = $request->file('document');
         $filename = $file->getClientOriginalName();

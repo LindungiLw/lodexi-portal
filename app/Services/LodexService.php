@@ -56,7 +56,7 @@ class LodexService
             'Accept' => 'application/json',
             // Do not set Content-Type to application/json, let Laravel set it to multipart/form-data
         ])->timeout(60)
-          ->attach('file', file_get_contents($filePath), $filename)
+          ->attach('file', fopen($filePath, 'r'), $filename)
           ->post("{$this->baseUrl}/v1/documents/upload", [
               'external_id' => $externalId,
               'category' => $category ?? '',
