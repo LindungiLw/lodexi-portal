@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
+use App\Models\User;
 
 class LodexService
 {
@@ -21,21 +22,30 @@ class LodexService
     /**
      * Get HTTP client with pre-configured API Key and headers.
      */
-    protected function client()
+    protected function client(?User $user = null)
     {
-        return Http::withHeaders([
+        $headers = [
             'X-API-Key' => $this->apiKey,
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-        ])->timeout(15);
+        ];
+        
+        if ($user && $user->llm_api_key) {
+            $headers['X-Tenant-LLM-Key'] = $user->llm_api_key;
+            if ($user->llm_provider) {
+                $headers['X-Tenant-LLM-Provider'] = $user->llm_provider;
+            }
+        }
+        
+        return Http::withHeaders($headers)->timeout(15);
     }
 
     /**
      * Ingest a document into the tenant's knowledge partition (JSON text).
      */
-    public function ingest(string $externalId, string $title, string $content, ?string $category = null, array $metadata = []): array
+    public function ingest(string $externalId, string $title, string $content, ?string $category = null, array $metadata = [], ?User $user = null): array
     {
-        $response = $this->client()->post("{$this->baseUrl}/v1/documents", [
+        $response = $this->client($user)->post("{$this->baseUrl}/v1/documents", [
             'external_id' => $externalId,
             'title' => $title,
             'content' => $content,
@@ -49,13 +59,22 @@ class LodexService
     /**
      * Upload a physical document (PDF, DOCX, TXT) to the tenant's knowledge partition.
      */
-    public function uploadDocument(string $externalId, string $filePath, string $filename, ?string $category = null, array $metadata = []): array
+    public function uploadDocument(string $externalId, string $filePath, string $filename, ?string $category = null, array $metadata = [], ?User $user = null): array
     {
-        $response = Http::withHeaders([
+        $headers = [
             'X-API-Key' => $this->apiKey,
             'Accept' => 'application/json',
             // Do not set Content-Type to application/json, let Laravel set it to multipart/form-data
-        ])->timeout(60)
+        ];
+        
+        if ($user && $user->llm_api_key) {
+            $headers['X-Tenant-LLM-Key'] = $user->llm_api_key;
+            if ($user->llm_provider) {
+                $headers['X-Tenant-LLM-Provider'] = $user->llm_provider;
+            }
+        }
+        
+        $response = Http::withHeaders($headers)->timeout(60)
           ->attach('file', fopen($filePath, 'r'), $filename)
           ->post("{$this->baseUrl}/v1/documents/upload", [
               'external_id' => $externalId,
@@ -73,9 +92,9 @@ class LodexService
     /**
      * Perform semantic vector search over the tenant's catalog/documents.
      */
-    public function search(string $query, int $limit = 5, ?string $category = null): array
+    public function search(string $query, int $limit = 5, ?string $category = null, ?User $user = null): array
     {
-        $response = $this->client()->post("{$this->baseUrl}/v1/search", [
+        $response = $this->client($user)->post("{$this->baseUrl}/v1/search", [
             'query' => $query,
             'limit' => $limit,
             'category_filter' => $category,
@@ -87,9 +106,9 @@ class LodexService
     /**
      * Ask a question and receive a grounded answer with verified citations.
      */
-    public function ask(string $question, int $limit = 4, ?string $category = null): array
+    public function ask(string $question, int $limit = 4, ?string $category = null, ?User $user = null): array
     {
-        $response = $this->client()->post("{$this->baseUrl}/v1/ask", [
+        $response = $this->client($user)->post("{$this->baseUrl}/v1/ask", [
             'question' => $question,
             'limit' => $limit,
             'category_filter' => $category,
@@ -101,9 +120,9 @@ class LodexService
     /**
      * Delete document chunks by external ID.
      */
-    public function delete(string $externalId): array
+    public function delete(string $externalId, ?User $user = null): array
     {
-        $response = $this->client()->delete("{$this->baseUrl}/v1/documents/{$externalId}");
+        $response = $this->client($user)->delete("{$this->baseUrl}/v1/documents/{$externalId}");
         return $response->json();
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\LodexService;
+use App\Models\TokenUsage;
 use Illuminate\Http\Request;
 
 class LodexPortalController extends Controller
@@ -32,7 +33,8 @@ class LodexPortalController extends Controller
         $results = $this->lodex->search(
             $request->input('query'),
             $request->input('limit', 5),
-            $request->input('category')
+            $request->input('category'),
+            auth()->user()
         );
         return response()->json($results);
     }
@@ -46,8 +48,20 @@ class LodexPortalController extends Controller
         $answer = $this->lodex->ask(
             $request->input('question'),
             $request->input('limit', 4),
-            $request->input('category')
+            $request->input('category'),
+            auth()->user()
         );
+        
+        // Log Token Usage
+        if (isset($answer['prompt_tokens']) || isset($answer['completion_tokens'])) {
+            TokenUsage::create([
+                'user_id' => auth()->id(),
+                'prompt_tokens' => $answer['prompt_tokens'] ?? 0,
+                'completion_tokens' => $answer['completion_tokens'] ?? 0,
+                'endpoint' => '/v1/ask'
+            ]);
+        }
+
         return response()->json($answer);
     }
 
@@ -83,7 +97,9 @@ class LodexPortalController extends Controller
                 $externalId,
                 $file->getRealPath(),
                 $filename,
-                $request->input('category')
+                $request->input('category'),
+                [],
+                auth()->user()
             );
             
             // Update status to Ingested

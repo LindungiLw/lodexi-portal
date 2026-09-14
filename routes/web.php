@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LodexPortalController;
+use App\Models\TokenUsage;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,7 +27,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('/dashboard/apikeys', function () {
-        return Inertia::render('Dashboard/ApiKeys');
+        $userId = auth()->id();
+        $analytics = [
+            'total_requests' => TokenUsage::where('user_id', $userId)->count(),
+            'prompt_tokens' => TokenUsage::where('user_id', $userId)->sum('prompt_tokens'),
+            'completion_tokens' => TokenUsage::where('user_id', $userId)->sum('completion_tokens'),
+        ];
+        return Inertia::render('Dashboard/ApiKeys', [
+            'analytics' => $analytics
+        ]);
     })->name('dashboard.apikeys');
 
     Route::get('/dashboard/playground', function () {
@@ -37,6 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/llm', [ProfileController::class, 'updateLlmSettings'])->name('profile.update_llm');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

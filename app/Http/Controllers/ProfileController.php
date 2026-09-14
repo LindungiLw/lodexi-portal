@@ -41,6 +41,22 @@ class ProfileController extends Controller
     }
 
     /**
+     * Update the user's LLM AI settings.
+     */
+    public function updateLlmSettings(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'llm_provider' => ['required', 'string', 'in:gemini,openai'],
+            'llm_api_key' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $request->user()->fill($validated);
+        $request->user()->save();
+
+        return Redirect::route('profile.edit');
+    }
+
+    /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse
