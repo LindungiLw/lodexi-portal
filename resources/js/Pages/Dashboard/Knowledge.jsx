@@ -37,7 +37,7 @@ export default function Knowledge({ documents = [] }) {
         formData.append('category', 'general');
 
         try {
-            const response = await fetch('/api/ingest', {
+            const response = await fetch('/portal/ingest', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),

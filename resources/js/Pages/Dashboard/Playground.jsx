@@ -21,7 +21,7 @@ export default function Playground() {
 
         try {
             // Memanggil API Backend Laravel yang akan diteruskan ke Python
-            const response = await fetch('/api/ask', {
+            const response = await fetch('/portal/ask', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

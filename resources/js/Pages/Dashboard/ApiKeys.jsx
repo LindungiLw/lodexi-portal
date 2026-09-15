@@ -1,45 +1,59 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { useState } from 'react';
-import { Key, Copy, Eye, EyeOff, PlusCircle, CheckCircle2, MoreVertical, Shield, Clock, AlertCircle, Activity, Zap, Cpu } from 'lucide-react';
+import { Head, router, useForm } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
+import { Key, Copy, Eye, EyeOff, PlusCircle, CheckCircle2, MoreVertical, Shield, Clock, AlertCircle, Webhook, BrainCircuit, MessageSquareText, Trash2, X } from 'lucide-react';
 import UpdateLlmSettingsForm from '../Profile/Partials/UpdateLlmSettingsForm';
+import ApiQuickStart from './Partials/ApiQuickStart';
+import Modal from '@/Components/Modal';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import TextInput from '@/Components/TextInput';
+import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 
-export default function ApiKeys({ analytics }) {
-    const [showKeys, setShowKeys] = useState({});
+export default function ApiKeys({ analytics, tokens, new_token }) {
     const [copiedKey, setCopiedKey] = useState(null);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [showNewTokenModal, setShowNewTokenModal] = useState(false);
+    const [keyToDelete, setKeyToDelete] = useState(null);
 
-    // Mock Data for Multiple API Keys
-    const mockKeys = [
-        {
-            id: 1,
-            name: "Production Key",
-            key: "lodexi_sk_live_9a8b7c6d5e4f3g2h1j0k",
-            prefix: "lodexi_sk_live_...",
-            created: "Sep 1, 2026",
-            lastUsed: "2 minutes ago",
-            status: "Active",
-            environment: "Production"
-        },
-        {
-            id: 2,
-            name: "Development Key",
-            key: "lodexi_sk_test_1k2j3h4g5f6e7d8c9b0a",
-            prefix: "lodexi_sk_test_...",
-            created: "Sep 5, 2026",
-            lastUsed: "Never",
-            status: "Active",
-            environment: "Test"
-        },
-    ];
+    const { data, setData, post, processing, errors, reset } = useForm({
+        name: '',
+    });
 
-    const toggleShowKey = (id) => {
-        setShowKeys(prev => ({ ...prev, [id]: !prev[id] }));
-    };
+    useEffect(() => {
+        if (new_token) {
+            setShowNewTokenModal(true);
+        }
+    }, [new_token]);
 
     const handleCopy = (id, keyString) => {
         navigator.clipboard.writeText(keyString);
         setCopiedKey(id);
         setTimeout(() => setCopiedKey(null), 2000);
+    };
+
+    const createKey = (e) => {
+        e.preventDefault();
+        post(route('dashboard.apikeys.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setIsCreateModalOpen(false);
+                reset();
+            },
+        });
+    };
+
+    const confirmDelete = (id) => {
+        setKeyToDelete(id);
+    };
+
+    const deleteKey = () => {
+        if (!keyToDelete) return;
+        router.delete(route('dashboard.apikeys.destroy', keyToDelete), {
+            preserveScroll: true,
+            onSuccess: () => setKeyToDelete(null),
+        });
     };
 
     return (
@@ -55,7 +69,10 @@ export default function ApiKeys({ analytics }) {
                             Manage your secret keys for authenticating requests to LODEXI Core API.
                         </p>
                     </div>
-                    <button className="flex items-center px-5 py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-slate-900 rounded-xl transition-all font-semibold shadow-sm text-sm">
+                    <button 
+                        onClick={() => setIsCreateModalOpen(true)}
+                        className="flex items-center px-5 py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-slate-900 rounded-xl transition-all font-semibold shadow-sm text-sm"
+                    >
                         <PlusCircle className="w-4 h-4 mr-2" />
                         Create new secret key
                     </button>
@@ -83,8 +100,8 @@ export default function ApiKeys({ analytics }) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* Total Requests */}
                         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-                            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400">
-                                <Activity className="w-6 h-6" />
+                            <div className="p-3 bg-[#F29191]/10 rounded-xl text-[#F29191]">
+                                <Webhook className="w-6 h-6" />
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total API Requests</p>
@@ -96,8 +113,8 @@ export default function ApiKeys({ analytics }) {
 
                         {/* Prompt Tokens */}
                         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-                            <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl text-purple-600 dark:text-purple-400">
-                                <Cpu className="w-6 h-6" />
+                            <div className="p-3 bg-[#F29191]/10 rounded-xl text-[#F29191]">
+                                <MessageSquareText className="w-6 h-6" />
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Prompt Tokens</p>
@@ -109,8 +126,8 @@ export default function ApiKeys({ analytics }) {
 
                         {/* Completion Tokens */}
                         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-                            <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl text-green-600 dark:text-green-400">
-                                <Zap className="w-6 h-6" />
+                            <div className="p-3 bg-[#F29191]/10 rounded-xl text-[#F29191]">
+                                <BrainCircuit className="w-6 h-6" />
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Completion Tokens</p>
@@ -128,15 +145,14 @@ export default function ApiKeys({ analytics }) {
                                 <thead className="bg-gray-50/50 dark:bg-slate-800/50 text-xs uppercase text-gray-500 dark:text-gray-400 font-semibold tracking-wider">
                                     <tr>
                                         <th className="px-4 py-3">Name</th>
-                                        <th className="px-4 py-3">Secret Key</th>
-                                        <th className="px-4 py-3">Environment</th>
+                                        <th className="px-4 py-3">Secret Key Prefix</th>
                                         <th className="px-4 py-3">Created</th>
                                         <th className="px-4 py-3">Last Used</th>
                                         <th className="px-4 py-3 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100 dark:divide-slate-800">
-                                    {mockKeys.map((item) => (
+                                    {tokens && tokens.length > 0 ? tokens.map((item) => (
                                         <tr key={item.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/30 transition-colors group">
                                             <td className="px-4 py-3.5">
                                                 <div className="font-medium text-gray-900 dark:text-white flex items-center">
@@ -145,50 +161,37 @@ export default function ApiKeys({ analytics }) {
                                             </td>
                                             <td className="px-4 py-3.5">
                                                 <div className="flex items-center space-x-2">
-                                                    <code className="bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md text-slate-800 dark:text-gray-300 font-mono text-xs border border-gray-200 dark:border-slate-700 w-48 truncate">
-                                                        {showKeys[item.id] ? item.key : item.prefix}
+                                                    <code className="bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md text-slate-800 dark:text-gray-300 font-mono text-xs border border-gray-200 dark:border-slate-700">
+                                                        [Hidden]
                                                     </code>
-                                                    <button
-                                                        onClick={() => toggleShowKey(item.id)}
-                                                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none"
-                                                        title={showKeys[item.id] ? "Hide Key" : "Reveal Key"}
-                                                    >
-                                                        {showKeys[item.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleCopy(item.id, item.key)}
-                                                        className="text-gray-400 hover:text-[#F29191] focus:outline-none"
-                                                        title="Copy Key"
-                                                    >
-                                                        {copiedKey === item.id ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                                                    </button>
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3.5">
-                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${item.environment === 'Production'
-                                                        ? 'bg-[#F29191]/10 text-[#e06b6b] border-[#F29191]/20 dark:bg-[#F29191]/20 dark:text-[#ffb0b0]'
-                                                        : 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
-                                                    }`}>
-                                                    {item.environment === 'Production' ? <Shield className="w-3 h-3 mr-1" /> : null}
-                                                    {item.environment}
-                                                </span>
-                                            </td>
                                             <td className="px-4 py-3.5 text-gray-500 dark:text-gray-400">
-                                                {item.created}
+                                                {item.created_at}
                                             </td>
                                             <td className="px-4 py-3.5">
                                                 <div className="flex items-center text-gray-500 dark:text-gray-400">
-                                                    {item.lastUsed !== "Never" && <Clock className="w-3.5 h-3.5 mr-1.5 opacity-70" />}
-                                                    {item.lastUsed}
+                                                    {item.last_used_at !== "Never" && <Clock className="w-3.5 h-3.5 mr-1.5 opacity-70" />}
+                                                    {item.last_used_at}
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3.5 text-right">
-                                                <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
-                                                    <MoreVertical className="w-5 h-5" />
+                                                <button 
+                                                    onClick={() => confirmDelete(item.id)}
+                                                    className="text-gray-400 hover:text-red-500 transition-colors focus:outline-none p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                                                    title="Revoke Key"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </td>
                                         </tr>
-                                    ))}
+                                    )) : (
+                                        <tr>
+                                            <td colSpan="5" className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                                                No API keys found. Create one to get started.
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -199,8 +202,105 @@ export default function ApiKeys({ analytics }) {
                         <UpdateLlmSettingsForm className="max-w-xl" />
                     </div>
 
+                    {/* Developer Quick Start */}
+                    <div className="bg-white p-4 shadow sm:rounded-2xl sm:p-8 dark:bg-slate-900 border border-gray-200 dark:border-slate-800">
+                        <ApiQuickStart />
+                    </div>
+
                 </div>
             </div>
+
+            {/* Create Key Modal */}
+            <Modal show={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
+                <form onSubmit={createKey} className="p-6">
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        Create new secret key
+                    </h2>
+                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        Give your key a descriptive name to remember what it's used for.
+                    </p>
+
+                    <div className="mt-6">
+                        <InputLabel htmlFor="name" value="Key Name" />
+                        <TextInput
+                            id="name"
+                            className="mt-1 block w-full"
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
+                            placeholder="e.g. My AppScript Bot"
+                            required
+                            isFocused
+                        />
+                        <InputError message={errors.name} className="mt-2" />
+                    </div>
+
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={() => setIsCreateModalOpen(false)}>Cancel</SecondaryButton>
+                        <PrimaryButton className="ms-3 bg-[#F29191] hover:bg-[#e06b6b] text-white" disabled={processing}>
+                            Create secret key
+                        </PrimaryButton>
+                    </div>
+                </form>
+            </Modal>
+
+            {/* Display New Key Modal (Only shown once) */}
+            <Modal show={showNewTokenModal} onClose={() => setShowNewTokenModal(false)}>
+                <div className="p-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 flex items-center">
+                            <CheckCircle2 className="w-5 h-5 mr-2 text-green-500" />
+                            Save your secret key
+                        </h2>
+                        <button onClick={() => setShowNewTokenModal(false)} className="text-gray-400 hover:text-gray-500">
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+                    
+                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                        <p className="text-sm text-yellow-700">
+                            Please save this secret key somewhere safe and accessible. For security reasons, <strong>you won't be able to view it again</strong> through your Lodexi account. If you lose this secret key, you'll need to generate a new one.
+                        </p>
+                    </div>
+
+                    <div className="flex items-center space-x-2 mt-4">
+                        <code className="flex-1 bg-gray-100 dark:bg-slate-800 p-3 rounded-lg text-slate-800 dark:text-gray-200 font-mono text-sm border border-gray-200 dark:border-slate-700 break-all">
+                            {new_token}
+                        </code>
+                        <button
+                            onClick={() => handleCopy('new_token', new_token)}
+                            className="p-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg hover:opacity-90 transition-opacity flex-shrink-0"
+                            title="Copy Key"
+                        >
+                            {copiedKey === 'new_token' ? <CheckCircle2 className="w-5 h-5 text-green-400" /> : <Copy className="w-5 h-5" />}
+                        </button>
+                    </div>
+
+                    <div className="mt-6 flex justify-end">
+                        <PrimaryButton onClick={() => setShowNewTokenModal(false)}>
+                            I saved my secret key
+                        </PrimaryButton>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* Delete Confirmation Modal */}
+            <Modal show={keyToDelete !== null} onClose={() => setKeyToDelete(null)}>
+                <div className="p-6">
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        Revoke API Key
+                    </h2>
+                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        Are you sure you want to revoke this API key? Any applications using this key will immediately lose access. This action cannot be undone.
+                    </p>
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={() => setKeyToDelete(null)}>Cancel</SecondaryButton>
+                        <PrimaryButton onClick={deleteKey} className="ms-3 bg-red-600 hover:bg-red-500 text-white">
+                            Revoke Key
+                        </PrimaryButton>
+                    </div>
+                </div>
+            </Modal>
+
         </AuthenticatedLayout>
     );
 }
