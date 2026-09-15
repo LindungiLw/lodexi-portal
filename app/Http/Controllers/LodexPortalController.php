@@ -111,4 +111,24 @@ class LodexPortalController extends Controller
             return response()->json(['error' => 'Failed to ingest document', 'details' => $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Delete a document from portal and vector store.
+     */
+    public function destroy($id)
+    {
+        $document = \App\Models\Document::where('user_id', auth()->id())->findOrFail($id);
+
+        try {
+            // Delete from Vector Store (Qdrant) via Core API
+            $this->lodex->delete($document->external_id, auth()->user());
+            
+            // Delete from MySQL Database
+            $document->delete();
+            
+            return redirect()->back()->with('success', 'Document deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete document: ' . $e->getMessage());
+        }
+    }
 }

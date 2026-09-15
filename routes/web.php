@@ -23,6 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/portal/search', [LodexPortalController::class, 'search'])->name('portal.search');
     Route::post('/portal/ask', [LodexPortalController::class, 'ask'])->name('portal.ask');
     Route::post('/portal/ingest', [LodexPortalController::class, 'ingest'])->name('portal.ingest');
+    Route::delete('/portal/documents/{id}', [LodexPortalController::class, 'destroy'])->name('portal.documents.destroy');
     Route::get('/dashboard', function () {
         $documents = \App\Models\Document::where('user_id', auth()->id())->latest()->get();
         return Inertia::render('Dashboard/Knowledge', [

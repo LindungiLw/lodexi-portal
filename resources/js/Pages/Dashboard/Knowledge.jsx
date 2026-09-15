@@ -74,6 +74,12 @@ export default function Knowledge({ documents = [] }) {
         }
     };
 
+    const handleDelete = (id) => {
+        if (confirm('Are you sure you want to delete this document? This action cannot be undone.')) {
+            router.delete(`/portal/documents/${id}`);
+        }
+    };
+
     return (
         <AuthenticatedLayout
             header={
@@ -190,7 +196,11 @@ export default function Knowledge({ documents = [] }) {
                                                     </td>
                                                     <td className="px-6 py-4">{new Date(doc.created_at).toLocaleDateString()}</td>
                                                     <td className="px-6 py-4 text-right">
-                                                        <button className="text-red-500 hover:text-red-700 transition-colors">
+                                                        <button 
+                                                            onClick={() => handleDelete(doc.id)}
+                                                            className="text-red-500 hover:text-red-700 transition-colors"
+                                                            title="Delete Document"
+                                                        >
                                                             <Trash2 className="w-4 h-4" />
                                                         </button>
                                                     </td>
