@@ -1,9 +1,9 @@
 <div align="center">
   <br />
   <img src="public/lodexi-logo.svg" width="300" alt="LODEXI Logo" />
-  <h1>LODEXI Portal</h1>
+  <h1>LODEXI</h1>
   <p>
-    <strong>The Centralized AI Gateway & Dashboard for the LODEXI Ecosystem</strong>
+    <strong>The Enterprise RAG Provider & AI Oracle Dashboard</strong>
   </p>
 </div>
 
@@ -11,7 +11,7 @@
 
 ## Overview
 
-**LODEXI Portal** is a modern, high-performance web application built to serve as the front-facing dashboard and management portal for the LODEXI Core Engine. It allows users and organizations to manage their AI knowledge bases, monitor API usage, and interact seamlessly with the underlying RAG (Retrieval-Augmented Generation) engine.
+**LODEXI** is an enterprise-grade web application built to serve as the front-facing dashboard and management portal for the LODEXI ecosystem. It allows users and organizations to manage their AI knowledge bases, monitor API usage, and interact seamlessly with the underlying RAG (Retrieval-Augmented Generation) engine (`lodexi-core`).
 
 Built with an elegant stack: **Laravel 13**, **React**, **Inertia.js**, and **Tailwind CSS**.
 
