@@ -12,6 +12,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.31",
         "laravel/tinker": "^3.0",
+        "league/commonmark": "^2.10",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
