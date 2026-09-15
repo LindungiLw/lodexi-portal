@@ -50,9 +50,9 @@ export default function Welcome({ auth }) {
                                 <button className="flex items-center gap-1 hover:text-[#F29191] dark:hover:text-white transition-colors">
                                     Solutions <svg className="w-4 h-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                                 </button>
-                                <button className="flex items-center gap-1 hover:text-[#F29191] dark:hover:text-white transition-colors">
-                                    Developers <svg className="w-4 h-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                                </button>
+                                <Link href={route('docs')} className="flex items-center gap-1 hover:text-[#F29191] dark:hover:text-white transition-colors">
+                                    Docs <svg className="w-4 h-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                </Link>
                                 <a href="#" className="hover:text-[#F29191] dark:hover:text-white transition-colors">Pricing</a>
                             </div>
                         </div>
@@ -121,7 +121,7 @@ export default function Welcome({ auth }) {
                             <div className="flex flex-col px-6 py-4 space-y-4">
                                 <a href="#" className="text-slate-800 dark:text-gray-300 hover:text-[#F29191] dark:hover:text-white font-medium">Product</a>
                                 <a href="#" className="text-slate-800 dark:text-gray-300 hover:text-[#F29191] dark:hover:text-white font-medium">Solutions</a>
-                                <a href="#" className="text-slate-800 dark:text-gray-300 hover:text-[#F29191] dark:hover:text-white font-medium">Developers</a>
+                                <Link href={route('docs')} className="text-slate-800 dark:text-gray-300 hover:text-[#F29191] dark:hover:text-white font-medium">Docs</Link>
                                 <a href="#" className="text-slate-800 dark:text-gray-300 hover:text-[#F29191] dark:hover:text-white font-medium">Pricing</a>
                                 
                                 <div className="h-px bg-slate-200 dark:bg-white/10 my-2"></div>
