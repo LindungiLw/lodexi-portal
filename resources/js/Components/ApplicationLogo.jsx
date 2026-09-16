@@ -1,20 +1,10 @@
 export default function ApplicationLogo(props) {
     return (
-        <svg {...props} viewBox="0 0 300 120" fill="none" xmlns="http://www.w3.org/2000/svg" className={props.className || "h-10 w-auto"}>
-            <defs>
-                <linearGradient id="lodexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#F29191" />
-                    <stop offset="100%" stopColor="#ffb0b0" />
-                </linearGradient>
-            </defs>
-            <path d="M40 25 L40 85 Q40 95 50 95 L95 95" fill="none" stroke="url(#lodexGradient)" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M55 45 L55 75 Q55 80 60 80 L85 80" fill="none" stroke="#F29191" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
-            <circle cx="85" cy="85" r="4" fill="#F29191"/>
-            <circle cx="45" cy="35" r="4" fill="#F29191"/>
-            <circle cx="75" cy="70" r="4" fill="#F29191"/>
-            <text x="110" y="76" fontFamily="Inter, Figtree, sans-serif" fontWeight="800" fontSize="58" fill="url(#lodexGradient)">
-                L<tspan className="fill-slate-900 dark:fill-white">O</tspan>DEXI
-            </text>
-        </svg>
+        <img 
+            src="/lodexi-avatar.png" 
+            alt="Lodexi Logo" 
+            className={props.className || "h-10 w-auto"} 
+            {...props} 
+        />
     );
 }
