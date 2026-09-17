@@ -1,7 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Search, Menu, X, ArrowLeft, MonitorPlay } from 'lucide-react';
+import { Search, Menu, X, ArrowLeft, MonitorPlay, Sun, Moon, LayoutGrid } from 'lucide-react';
 
 export default function DocsIndex({ content, navigation, currentPage }) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,29 +17,41 @@ export default function DocsIndex({ content, navigation, currentPage }) {
 
             {/* Top Navbar */}
             <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
-                <div className="flex h-16 items-center px-4 md:px-8 max-w-8xl mx-auto justify-between">
+                <div className="flex h-16 items-center px-4 md:px-6 w-full mx-auto justify-between">
                     <div className="flex items-center gap-6">
-                        <Link href="/" className="flex items-center gap-2 mr-4">
-                            <ApplicationLogo className="h-8 w-auto" />
-                            <span className="font-bold text-lg hidden sm:inline-block">Docs</span>
+                        <Link href="/" className="flex items-center gap-2">
+                            <ApplicationLogo className="h-7 w-auto" />
+                            <span className="bg-[#F29191]/10 text-[#e06a6a] dark:bg-[#F29191]/20 dark:text-[#F29191] font-semibold text-[13px] px-2 py-0.5 rounded-md hidden sm:inline-block ml-1">Docs</span>
                         </Link>
                         
-                        {/* Search Mock */}
-                        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md text-sm text-slate-500 w-64 cursor-text transition-colors hover:border-[#F29191] hover:ring-1 hover:ring-[#F29191]/20">
-                            <Search className="w-4 h-4 opacity-50" />
-                            <span>Search...</span>
-                            <kbd className="ml-auto text-[10px] px-1.5 rounded border border-slate-300 dark:border-slate-700 font-sans bg-white dark:bg-slate-800">⌘K</kbd>
+                        {/* Top Nav Links */}
+                        <div className="hidden lg:flex items-center gap-6 ml-4 text-[15px] font-medium text-slate-600 dark:text-slate-300">
+                            <Link href="#" className="hover:text-[#F29191] transition-colors">Guides</Link>
+                            <Link href="#" className="hover:text-[#F29191] transition-colors">Learn</Link>
+                            <Link href="#" className="hover:text-[#F29191] transition-colors">AI</Link>
+                            <Link href="#" className="hover:text-[#F29191] transition-colors">Reference</Link>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <Link href={route('dashboard')} className="hidden sm:flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-[#F29191] dark:text-slate-400 dark:hover:text-[#F29191] transition-colors">
-                            <MonitorPlay className="w-4 h-4" />
-                            Dashboard
+                    <div className="flex items-center gap-2 sm:gap-4">
+                        <div className="hidden sm:flex items-center gap-1 sm:gap-2 text-slate-600 dark:text-slate-400">
+                            <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+                                <Search className="w-5 h-5" />
+                            </button>
+                            <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+                                <Sun className="w-5 h-5" />
+                            </button>
+                            <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+                                <LayoutGrid className="w-5 h-5" />
+                            </button>
+                        </div>
+                        
+                        <Link href={route('dashboard')} className="hidden sm:flex items-center justify-center px-5 py-2 text-sm font-bold text-white bg-[#F29191] hover:bg-[#e07a7a] rounded-full transition-colors ml-2">
+                            Get started
                         </Link>
                         
                         <button 
-                            className="md:hidden p-2 text-slate-600 dark:text-slate-400"
+                            className="lg:hidden p-2 text-slate-600 dark:text-slate-400"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         >
                             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
